@@ -34,27 +34,8 @@ public class ServerGUI {
 					.setComponentOrientation(java.awt.ComponentOrientation.RIGHT_TO_LEFT);
 		}
 
-		
-
-		JComponent labelsPanel = new  JPanel();
-		labelsPanel.setLayout(new GridLayout(3,2));
-		contentPane.add(labelsPanel, BorderLayout.EAST);
-		
-		labelsPanel.add(new JLabel("Server status :"));
-		JLabel statusServerLable = new JLabel("Stopped");
-		labelsPanel.add(statusServerLable);
-		
-		labelsPanel.add(new JLabel("Server address :"));
-		JFormattedTextField serverAddress = new JFormattedTextField(createFormatter("###.###.###.###"));
-		labelsPanel.add(serverAddress);
-		
-		labelsPanel.add(new JLabel("Server port :"));
-		JFormattedTextField portServer = new JFormattedTextField(createFormatter("#####"));
-		labelsPanel.add(portServer);
-//		portServer.setText("11");
-//		portServer.setEditable(false);
-
 		JButton actionButton = new JButton("Start Server");
+
 		contentPane.add(actionButton, BorderLayout.PAGE_START);
 
 		actionButton = new JButton("Button 2 (CENTER)");
@@ -70,6 +51,24 @@ public class ServerGUI {
 		actionButton = new JButton("5 (LINE_END)");
 		contentPane.add(actionButton, BorderLayout.LINE_END);
 		
+		JComponent labelsPanel = new  JPanel();
+		labelsPanel.setLayout(new GridLayout(3,2));
+		
+		labelsPanel.add(new JLabel("Server status :"));
+		JLabel statusServerLable = new JLabel("Stopped");
+		labelsPanel.add(statusServerLable);
+		contentPane.add(labelsPanel);
+		
+		
+		labelsPanel.add(new JLabel("Server address :"));
+		JFormattedTextField serverAddress = new JFormattedTextField(createFormatter("###.###.###.###"));
+		labelsPanel.add(serverAddress);
+		
+		labelsPanel.add(new JLabel("Server port :"));
+		JFormattedTextField portServer = new JFormattedTextField(createFormatter("#####"));
+		labelsPanel.add(portServer);
+//		portServer.setText("11");
+//		portServer.setEditable(false);
 	}
 
 	protected static MaskFormatter createFormatter(String s) {
