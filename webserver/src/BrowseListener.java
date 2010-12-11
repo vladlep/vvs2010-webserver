@@ -12,11 +12,13 @@ public class BrowseListener extends AbstractAction {
 	private static final long serialVersionUID = 8028282704243134323L;
 	JFileChooser chooser;
     JFrame frame;
-
-    BrowseListener(JFrame frame, JFileChooser chooser) {
+    String rootType;
+    
+    BrowseListener(JFrame frame, JFileChooser chooser,String rootType) {
         super("Open");
         this.chooser = chooser;
         this.frame = frame;
+        this.rootType = rootType;
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -26,9 +28,12 @@ public class BrowseListener extends AbstractAction {
         if(result == JFileChooser.APPROVE_OPTION)
         {// Get the selected file
         File file = chooser.getSelectedFile();
-        System.out.println(file.getAbsolutePath());
-        }
+        if(rootType.equals("Mentenace"))
+        	ServerGUI.setMentDir(file.getAbsolutePath());
         else
-        	System.out.println("cancel");
+        	ServerGUI.setRootDir(file.getAbsolutePath());
+       
+        }
+        
     }
 }
