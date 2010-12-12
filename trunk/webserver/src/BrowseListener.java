@@ -29,10 +29,15 @@ public class BrowseListener extends AbstractAction {
         {// Get the selected file
         File file = chooser.getSelectedFile();
         if(rootType.equals("Mentenace"))
+        {
         	ServerGUI.setMentDir(file.getAbsolutePath());
+        	ServerGUI.validateMent();
+        }
         else
+        {
         	ServerGUI.setRootDir(file.getAbsolutePath());
-       
+        	ServerGUI.validateRoot();
+        }
         }
         
     }
