@@ -185,6 +185,7 @@ public class ServerGUI {
 						JOptionPane.showMessageDialog(frame,"Not a valid path for the root directory!");
 						return;
 					}
+				
 					serverAddress.setEditable(false);
 					portServer.setEditable(false);
 					rootDir.setEditable(false);
@@ -323,4 +324,6 @@ public class ServerGUI {
 	
 	validMentDir.setText("OK");
 	}
+	
+	
 }
