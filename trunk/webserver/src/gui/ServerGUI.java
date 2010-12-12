@@ -33,7 +33,7 @@ public class ServerGUI {
 	private static JTextField mentenanceDir;
 	private static JLabel validMentDir;
 	private static JLabel validRootDir;
-	
+
 	public void addComponentsToPane(Container contentPane) {
 		// Use BorderLayout. Default empty constructor with no horizontal and
 		// vertical
@@ -50,19 +50,6 @@ public class ServerGUI {
 					.setComponentOrientation(java.awt.ComponentOrientation.RIGHT_TO_LEFT);
 		}
 
-		// contentPane.add(actionButton, BorderLayout.PAGE_START);
-		//
-		// actionButton = new JButton("Button 2 (CENTER)");
-		// // actionButton.setPreferredSize(new Dimension(200, 100));
-		// contentPane.add(actionButton, BorderLayout.CENTER);
-		//		
-		// actionButton = new JButton("Button 3 (LINE_START)");
-		// contentPane.add(actionButton, BorderLayout.LINE_START);
-		//
-		// actionButton = new JButton("Long-Named Button 4 (PAGE_END)");
-		// contentPane.add(actionButton, BorderLayout.PAGE_END);
-		//
-
 		JComponent labelsPanel = new JPanel();
 		GridLayout labelsLayout = new GridLayout(3, 2);
 		labelsLayout.setHgap(2);
@@ -72,7 +59,7 @@ public class ServerGUI {
 		contentPane.add(labelsPanel, BorderLayout.LINE_START);
 
 		labelsPanel.add(new JLabel("Server status :"));
-		JLabel statusServerLable = new JLabel("Stopped");
+		final JLabel statusServerLable = new JLabel("Stopped");
 		labelsPanel.add(statusServerLable);
 
 		labelsPanel.add(new JLabel("Server address (*):"));
@@ -101,12 +88,11 @@ public class ServerGUI {
 
 		pathPanel.add(new JLabel("Root dir (*) : "));
 		rootDir = new JTextField("Insert root dir");
-		
-		
+
 		rootDir.addKeyListener(new KeyListener() {
 
 			public void keyTyped(KeyEvent e) {
-	
+
 			}
 
 			@Override
@@ -116,93 +102,97 @@ public class ServerGUI {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-	
-				
+
 			}
 		});
-		
+
 		pathPanel.add(rootDir);
 
 		final JButton browseButton = new JButton("Browse");
-		
+
 		pathPanel.add(browseButton);
-		
+
 		validRootDir = new JLabel("Not set");
-		pathPanel.add(validRootDir); 
-		
+		pathPanel.add(validRootDir);
+
 		final JFileChooser browseRoot = new JFileChooser();
-		
+
 		browseRoot.changeToParentDirectory();
 		browseRoot.setMultiSelectionEnabled(false);
 		browseRoot.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-		browseButton.addActionListener(new BrowseListener(frame, browseRoot,"Root"));
+		browseButton.addActionListener(new BrowseListener(frame, browseRoot,
+				"Root"));
 
 		pathPanel.add(new JLabel("Mentenance dir : "));
 		mentenanceDir = new JTextField("Insert mentenance dir");
-			
+
 		pathPanel.add(mentenanceDir);
 
 		mentenanceDir.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
-			validateMent();
+				validateMent();
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		final JButton browseMentButton = new JButton("Browse");
 		pathPanel.add(browseMentButton);
-		
+
 		validMentDir = new JLabel("Not set");
 		pathPanel.add(validMentDir);
-		
-		browseMentButton.addActionListener(new BrowseListener(frame, browseRoot,"Mentenace"));
+
+		browseMentButton.addActionListener(new BrowseListener(frame,
+				browseRoot, "Mentenace"));
 
 		actionButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
 				if (actionButton.getText().equals("Start Server")) {
-//					System.out.println(portServer.getText().trim()+"\"") ;
-					if(serverAddress.getText().equals("   .   .   .   ") || portServer.getText().trim()=="" )
-					{
-						JOptionPane.showMessageDialog(frame,"Elements marked as (*) can not be empty");
+					// System.out.println(portServer.getText().trim()+"\"") ;
+					if (serverAddress.getText().equals("   .   .   .   ")
+							|| portServer.getText().trim() == "") {
+						JOptionPane.showMessageDialog(frame,
+								"Elements marked as (*) can not be empty");
 						return;
 					}
-					if(!validRootDir.getText().equals("OK"))
-					{
-						JOptionPane.showMessageDialog(frame,"Not a valid path for the root directory!");
+					if (!validRootDir.getText().equals("OK")) {
+						JOptionPane.showMessageDialog(frame,
+								"Not a valid path for the root directory!");
 						return;
 					}
-				
-					serverAddress.setEditable(false);
-					portServer.setEditable(false);
-					rootDir.setEditable(false);
+
+					serverAddress.setEnabled(false);
+					portServer.setEnabled(false);
+					rootDir.setEnabled(false);
 					browseButton.setEnabled(false);
 					actionButton.setText("Stop Server");
+					statusServerLable.setText("Started");
 				} else {
-					//stop server action
-					serverAddress.setEditable(true);
-					portServer.setEditable(true);
-					rootDir.setEditable(true);
+					// stop server action
+					serverAddress.setEnabled(true);
+					portServer.setEnabled(true);
+					rootDir.setEnabled(true);
 					browseButton.setEnabled(true);
 					actionButton.setText("Start Server");
 					browseMentButton.setEnabled(true);
 					mentenaceButton.setText("Start Mentenance");
-					mentenanceDir.setEditable(true);
+					mentenanceDir.setEnabled(true);
+					statusServerLable.setText("Stopped");
 				}
 			}
 		});
@@ -212,32 +202,31 @@ public class ServerGUI {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (mentenaceButton.getText().equals("Start Mentenance")) {
-					if(actionButton.getText().equals("Start Server"))
-					{
-						JOptionPane.showMessageDialog(frame,"Start server first");
+					if (actionButton.getText().equals("Start Server")) {
+						JOptionPane.showMessageDialog(frame,
+								"Start server first");
 						return;
 					}
-					if(!validMentDir.getText().equals("OK"))
-					{
-						JOptionPane.showMessageDialog(frame,"Not a valid path for the mentenace!");
+					if (!validMentDir.getText().equals("OK")) {
+						JOptionPane.showMessageDialog(frame,
+								"Not a valid path for the mentenace!");
 						return;
 					}
-					rootDir.setEditable(true);
+					rootDir.setEnabled(true);
 					browseButton.setEnabled(true);
 					browseMentButton.setEnabled(false);
 					mentenaceButton.setText("Stop Mentenace");
-					mentenanceDir.setEditable(false);
-				}
-				else
-				{
+					statusServerLable.setText("Mentenace");
+					mentenanceDir.setEnabled(false);
+					actionButton.setEnabled(false);
+				} else {
 					browseMentButton.setEnabled(true);
 					mentenaceButton.setText("Start Mentenance");
-					mentenanceDir.setEditable(true);
-					if(actionButton.getText().equals("Stop Server"))
-					{
-						rootDir.setEditable(false);
-						browseButton.setEnabled(false);
-					}
+					mentenanceDir.setEnabled(true);
+					rootDir.setEnabled(false);
+					browseButton.setEnabled(false);
+					statusServerLable.setText("Mentenace");
+					actionButton.setEnabled(true);
 				}
 			}
 		});
@@ -275,57 +264,49 @@ public class ServerGUI {
 			}
 		});
 	}
-	public static void setRootDir(String newRoot)
-	{
+
+	public static void setRootDir(String newRoot) {
 		rootDir.setText(newRoot);
 	}
-	
-	public static void setMentDir(String newDir)
-	{
+
+	public static void setMentDir(String newDir) {
 		mentenanceDir.setText(newDir);
 	}
-	
-	public static void  validateRoot()
-	{
+
+	public static void validateRoot() {
 		String path = rootDir.getText();
-		
+
 		File file = new File(path);
-		
-		if(!file.isDirectory())
-		{
+
+		if (!file.isDirectory()) {
 			validRootDir.setText("Not a directory");
 			return;
 		}
-		file = new File(path+"/index.html");
-		if(!file.exists())
-		{
+		file = new File(path + "/index.html");
+		if (!file.exists()) {
 			validRootDir.setText("No index.html");
 			return;
 		}
-	
-	validRootDir.setText("OK");
+
+		validRootDir.setText("OK");
 	}
-	
-	public static void  validateMent()
-	{
+
+	public static void validateMent() {
 		String path = mentenanceDir.getText();
-		
+
 		File file = new File(path);
-		
-		if(!file.isDirectory())
-		{
+
+		if (!file.isDirectory()) {
 			validMentDir.setText("Not a directory");
 			return;
 		}
-		file = new File(path+"/mentenace.html");
-		if(!file.exists())
-		{
-			validMentDir.setText("No mentenace.html");
+		file = new File(path + "/mentenance.html");
+		if (!file.exists()) {
+			validMentDir.setText("No mentenance.html");
 			return;
 		}
-	
-	validMentDir.setText("OK");
+
+		validMentDir.setText("OK");
 	}
-	
-	
+
 }
