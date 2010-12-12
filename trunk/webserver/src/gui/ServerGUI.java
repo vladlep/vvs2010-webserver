@@ -225,7 +225,7 @@ public class ServerGUI {
 					mentenanceDir.setEnabled(true);
 					rootDir.setEnabled(false);
 					browseButton.setEnabled(false);
-					statusServerLable.setText("Mentenace");
+					statusServerLable.setText("Started");
 					actionButton.setEnabled(true);
 				}
 			}
