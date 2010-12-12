@@ -1,0 +1,30 @@
+useFixture(default)
+
+def test():
+    java_recorded_version = '1.6.0_22'
+
+    if window('Server GUI'):
+        select('TextField', r'C:\Users\vll\vlad\scoala\test')
+        click('Label4')
+        click('Label4')
+        assert_p('Label5', 'Text', 'OK')
+        assert_p('TextField', 'Text', r'C:\Users\vll\vlad\scoala\test')
+        select('FormattedTextField', '127.000.000.001')
+        select('FormattedTextField1', '90000')
+        assert_p('Start Server', 'Text', 'Start Server')
+        assert_p('FormattedTextField1', 'Text', '90000')
+        assert_p('FormattedTextField', 'Text', '127.000.000.001')
+        assert_p('FormattedTextField', 'Enabled', 'true')
+        assert_p('FormattedTextField1', 'Enabled', 'true')
+        assert_p('TextField', 'Enabled', 'true')
+        assert_p('Browse', 'Enabled', 'true')
+        assert_p('Browse1', 'Enabled', 'true')
+        assert_p('TextField1', 'Enabled', 'true')
+        assert_p('Start Mentenance', 'Enabled', 'true')
+        click('Start Server')
+        assert_p('FormattedTextField', 'Enabled', 'false')
+        assert_p('FormattedTextField1', 'Enabled', 'false')
+        assert_p('Label1', 'Text', 'Started')
+        assert_p('Browse1', 'Enabled', 'true')
+        assert_p('TextField1', 'Enabled', 'true')
+    close()
