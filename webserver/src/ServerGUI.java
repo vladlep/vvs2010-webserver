@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
@@ -10,6 +11,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -27,6 +29,8 @@ public class ServerGUI {
 	private JFrame frame;
 	private static JTextField rootDir;
 	private static JTextField mentenanceDir;
+	private static JLabel validMentDir;
+	private static JLabel validRootDir;
 	
 	public void addComponentsToPane(Container contentPane) {
 		// Use BorderLayout. Default empty constructor with no horizontal and
@@ -90,7 +94,7 @@ public class ServerGUI {
 		JPanel pathPanel = new JPanel();
 
 		contentPane.add(pathPanel, BorderLayout.PAGE_END);
-		LayoutManager pathPanelLayout = new GridLayout(2, 3);
+		LayoutManager pathPanelLayout = new GridLayout(2, 4);
 		pathPanel.setLayout(pathPanelLayout);
 
 		pathPanel.add(new JLabel("Root dir (*) : "));
@@ -100,20 +104,18 @@ public class ServerGUI {
 		rootDir.addKeyListener(new KeyListener() {
 
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("typed");
+	
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				System.out.println("released");
-
+				validateRoot();
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println("presed");
-
+	
+				
 			}
 		});
 		
@@ -122,7 +124,10 @@ public class ServerGUI {
 		final JButton browseButton = new JButton("Browse");
 		
 		pathPanel.add(browseButton);
-
+		
+		validRootDir = new JLabel("Not set");
+		pathPanel.add(validRootDir); 
+		
 		final JFileChooser browseRoot = new JFileChooser();
 		
 		browseRoot.changeToParentDirectory();
@@ -133,23 +138,51 @@ public class ServerGUI {
 
 		pathPanel.add(new JLabel("Mentenance dir : "));
 		mentenanceDir = new JTextField("Insert mentenance dir");
-		
+			
 		pathPanel.add(mentenanceDir);
 
+		mentenanceDir.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			validateMent();
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		final JButton browseMentButton = new JButton("Browse");
 		pathPanel.add(browseMentButton);
-		browseMentButton
-				.addActionListener(new BrowseListener(frame, browseRoot,"Mentenace"));
+		
+		validMentDir = new JLabel("Not set");
+		pathPanel.add(validMentDir);
+		
+		browseMentButton.addActionListener(new BrowseListener(frame, browseRoot,"Mentenace"));
 
 		actionButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
 				if (actionButton.getText().equals("Start Server")) {
-					System.out.println(portServer.getText().trim()+"\"") ;
+//					System.out.println(portServer.getText().trim()+"\"") ;
 					if(serverAddress.getText().equals("   .   .   .   ") || portServer.getText().trim()=="" )
 					{
 						JOptionPane.showMessageDialog(frame,"Elements marked as (*) can not be empty");
+						return;
+					}
+					if(!validRootDir.getText().equals("OK"))
+					{
+						JOptionPane.showMessageDialog(frame,"Not a valid path for the root directory!");
 						return;
 					}
 					serverAddress.setEditable(false);
@@ -179,6 +212,11 @@ public class ServerGUI {
 					if(actionButton.getText().equals("Start Server"))
 					{
 						JOptionPane.showMessageDialog(frame,"Start server first");
+						return;
+					}
+					if(!validMentDir.getText().equals("OK"))
+					{
+						JOptionPane.showMessageDialog(frame,"Not a valid path for the mentenace!");
 						return;
 					}
 					rootDir.setEditable(true);
@@ -244,4 +282,45 @@ public class ServerGUI {
 		mentenanceDir.setText(newDir);
 	}
 	
+	public static void  validateRoot()
+	{
+		String path = rootDir.getText();
+		
+		File file = new File(path);
+		
+		if(!file.isDirectory())
+		{
+			validRootDir.setText("Not a directory");
+			return;
+		}
+		file = new File(path+"/index.html");
+		if(!file.exists())
+		{
+			validRootDir.setText("No index.html");
+			return;
+		}
+	
+	validRootDir.setText("OK");
+	}
+	
+	public static void  validateMent()
+	{
+		String path = mentenanceDir.getText();
+		
+		File file = new File(path);
+		
+		if(!file.isDirectory())
+		{
+			validMentDir.setText("Not a directory");
+			return;
+		}
+		file = new File(path+"/mentenace.html");
+		if(!file.exists())
+		{
+			validMentDir.setText("No mentenace.html");
+			return;
+		}
+	
+	validMentDir.setText("OK");
+	}
 }
