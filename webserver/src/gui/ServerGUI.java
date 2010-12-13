@@ -1,16 +1,11 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -35,9 +30,7 @@ public class ServerGUI {
 	private static JLabel validRootDir;
 
 	public void addComponentsToPane(Container contentPane) {
-		// Use BorderLayout. Default empty constructor with no horizontal and
-		// vertical
-		// gaps
+		
 		contentPane.setLayout(new BorderLayout(5, 5));
 		if (!(contentPane.getLayout() instanceof BorderLayout)) {
 			contentPane.add(new JLabel("Container doesn't use BorderLayout!"));
@@ -71,9 +64,7 @@ public class ServerGUI {
 		final JFormattedTextField portServer = new JFormattedTextField(
 				createFormatter("#####"));
 		labelsPanel.add(portServer);
-		// portServer.setText("11");
-		// portServer.setEditable(false);
-
+		
 		final JButton actionButton = new JButton("Start Server");
 		contentPane.add(actionButton, BorderLayout.CENTER);
 
@@ -163,7 +154,7 @@ public class ServerGUI {
 			public void actionPerformed(ActionEvent e) {
 
 				if (actionButton.getText().equals("Start Server")) {
-					// System.out.println(portServer.getText().trim()+"\"") ;
+				
 					if (serverAddress.getText().equals("   .   .   .   ")
 							|| portServer.getText().trim() == "") {
 						JOptionPane.showMessageDialog(frame,
