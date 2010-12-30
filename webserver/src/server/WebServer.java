@@ -9,10 +9,11 @@ public class WebServer extends Thread {
 	public final int port;
 	public final String pathRoot;
 	public final String pathMent;
-	public static WebServer server = null;
+	private ServerSocket serverSocket = null;
+	public static int i=0;
 	
 	public void run() {
-		ServerSocket serverSocket = null;
+		
 		serverStarted = true;
 		try {
 			serverSocket = new ServerSocket(port);
@@ -20,7 +21,10 @@ public class WebServer extends Thread {
 			try {
 				while (serverStarted) {
 					System.out.println("Waiting for Connection");
-					new ClientServer(serverSocket.accept());
+					Socket client = serverSocket.accept();
+					if(serverStarted)
+						new	ClientServer(client);
+					i= i+10;
 				}
 			} catch (IOException e) {
 				System.err.println("Accept failed.");
@@ -48,10 +52,10 @@ public class WebServer extends Thread {
 
 	public static void startServer(int port, String pathRoot, String pathMent)
 	{
-		if(server == null)
-			server = new WebServer(port, pathRoot, pathMent);
-		System.out.println(server.toString());
-		server.start();
+		
+		new WebServer(port, pathRoot, pathMent).start();
+		
+		
 	}
 	
 	public static void stopServer()
