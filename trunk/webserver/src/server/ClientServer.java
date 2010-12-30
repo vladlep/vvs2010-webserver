@@ -27,7 +27,7 @@ public class ClientServer extends Thread {
 			String inputLine;
 			
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println("Server: " + inputLine);
+				System.out.println("Server: " +WebServer.i+ inputLine);
 				out.println(inputLine);
 
 				if (inputLine.trim().equals(""))

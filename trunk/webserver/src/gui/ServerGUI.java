@@ -81,7 +81,7 @@ public class ServerGUI {
 		pathPanel.setLayout(pathPanelLayout);
 
 		pathPanel.add(new JLabel("Root dir (*) : "));
-		rootDir = new JTextField("Insert root dir");
+		rootDir = new JTextField("C:\\Users\\vll\\vlad\\scoala\\test");
 
 		rootDir.addKeyListener(new KeyListener() {
 
