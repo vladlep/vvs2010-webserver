@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,6 +21,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
+
+import server.WebServer;
 
 public class ServerGUI {
 	public static boolean RIGHT_TO_LEFT = false;
@@ -166,7 +169,17 @@ public class ServerGUI {
 								"Not a valid path for the root directory!");
 						return;
 					}
-
+					
+					int port  = Integer.valueOf(portServer.getText());
+//					try {
+						WebServer.startServer(port, rootDir.getText(), mentenanceDir.getText());
+//					} catch (IOException e1) {
+//						JOptionPane.showMessageDialog(frame,
+//						"Can't start server");
+//						return;
+//					}
+					
+					
 					serverAddress.setEnabled(false);
 					portServer.setEnabled(false);
 					rootDir.setEnabled(false);
@@ -175,6 +188,8 @@ public class ServerGUI {
 					statusServerLable.setText("Started");
 				} else {
 					// stop server action
+					WebServer.stopServer();
+					
 					serverAddress.setEnabled(true);
 					portServer.setEnabled(true);
 					rootDir.setEnabled(true);
