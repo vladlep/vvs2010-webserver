@@ -4,16 +4,16 @@ import java.net.*;
 import java.io.*;
 
 public class WebServer extends Thread {
-	
+
 	public static boolean serverStarted;
 	public final int port;
 	public final String pathRoot;
 	public final String pathMent;
-	private ServerSocket serverSocket = null;
-	public static int i=0;
-	
+	private static ServerSocket serverSocket = null;
+	public static int i = 0;
+
 	public void run() {
-		
+
 		serverStarted = true;
 		try {
 			serverSocket = new ServerSocket(port);
@@ -22,51 +22,60 @@ public class WebServer extends Thread {
 				while (serverStarted) {
 					System.out.println("Waiting for Connection");
 					Socket client = serverSocket.accept();
-					if(serverStarted)
-						new	ClientServer(client);
-					i= i+10;
+					if (serverStarted)
+						new ClientServer(client).start();
+					i = i + 10;
 				}
 			} catch (IOException e) {
-				System.err.println("Accept failed.");
-				System.exit(1);
+				if (serverStarted) {
+					System.err.println("Accept failed.");
+					System.exit(1);
+				}
+				else
+				{
+					System.out.println("Server stopped.");
+				}
+
 			}
 		} catch (IOException e) {
-			System.err.println("Could not listen on port: "+port+".");
+			System.err.println("Could not listen on port: " + port + ".");
 			System.exit(1);
 		} finally {
 			try {
 				serverSocket.close();
 			} catch (IOException e) {
-				System.err.println("Could not close port: "+port+".");
+				System.err.println("Could not close port: " + port + ".");
 				System.exit(1);
 			}
 		}
 	}
 
 	private WebServer(int port, String pathRoot, String pathMent) {
-	this.port = port;
-	this.pathRoot = pathRoot;
-	this.pathMent = pathMent;
-	
+		this.port = port;
+		this.pathRoot = pathRoot;
+		this.pathMent = pathMent;
+
 	}
 
-	public static void startServer(int port, String pathRoot, String pathMent)
-	{
-		
+	public static void startServer(int port, String pathRoot, String pathMent) {
+
 		new WebServer(port, pathRoot, pathMent).start();
-		
-		
+
 	}
-	
-	public static void stopServer()
-	{
+
+	public static void stopServer() {
 		serverStarted = false;
-		
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			System.out.println("always apperas ? ? ");
+			e.printStackTrace();
+		}
 	}
-	
-	@Override
+
+
 	public String toString() {
-	
-	return "port: "+port+" root: "+pathRoot+" ment : "+pathMent;
+
+		return "port: " + port + " root: " + pathRoot + " ment : " + pathMent;
 	}
 }

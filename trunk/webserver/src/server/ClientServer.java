@@ -12,7 +12,7 @@ public class ClientServer extends Thread {
 	
 	public ClientServer(Socket clientSoc) {
 		clientSocket = clientSoc;
-		start();
+		
 	}
 
 	public void run() {
