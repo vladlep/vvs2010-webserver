@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 
-
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -27,13 +26,14 @@ import server.WebServer;
 public class ServerGUI {
 	public static boolean RIGHT_TO_LEFT = false;
 	private JFrame frame;
-	private static JTextField rootDir;
-	private static JTextField mentenanceDir;
-	private static JLabel validMentDir;
-	private static JLabel validRootDir;
+	private JTextField rootDir;
+	private JTextField mentenanceDir;
+	private JLabel validMentDir;
+	private JLabel validRootDir;
+	private WebServer server = null;
 
 	public void addComponentsToPane(Container contentPane) {
-		
+
 		contentPane.setLayout(new BorderLayout(5, 5));
 		if (!(contentPane.getLayout() instanceof BorderLayout)) {
 			contentPane.add(new JLabel("Container doesn't use BorderLayout!"));
@@ -67,7 +67,7 @@ public class ServerGUI {
 		final JFormattedTextField portServer = new JFormattedTextField(
 				createFormatter("#####"));
 		labelsPanel.add(portServer);
-		
+
 		final JButton actionButton = new JButton("Start Server");
 		contentPane.add(actionButton, BorderLayout.CENTER);
 
@@ -116,7 +116,7 @@ public class ServerGUI {
 		browseRoot.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		browseButton.addActionListener(new BrowseListener(frame, browseRoot,
-				"Root"));
+				"Root",this));
 
 		pathPanel.add(new JLabel("Mentenance dir : "));
 		mentenanceDir = new JTextField("Insert mentenance dir");
@@ -150,14 +150,14 @@ public class ServerGUI {
 		pathPanel.add(validMentDir);
 
 		browseMentButton.addActionListener(new BrowseListener(frame,
-				browseRoot, "Mentenace"));
+				browseRoot, "Mentenace",this));
 
 		actionButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 
 				if (actionButton.getText().equals("Start Server")) {
-				
+
 					if (serverAddress.getText().equals("   .   .   .   ")
 							|| portServer.getText().trim() == "") {
 						JOptionPane.showMessageDialog(frame,
@@ -169,17 +169,19 @@ public class ServerGUI {
 								"Not a valid path for the root directory!");
 						return;
 					}
-					
-					int port  = Integer.valueOf(portServer.getText());
-//					try {
-						WebServer.startServer(port, rootDir.getText(), mentenanceDir.getText());
-//					} catch (IOException e1) {
-//						JOptionPane.showMessageDialog(frame,
-//						"Can't start server");
-//						return;
-//					}
-					
-					
+
+					int port = Integer.valueOf(portServer.getText());
+
+					server = new WebServer(port, rootDir.getText(),
+							mentenanceDir.getText());
+					try{
+					server.start();
+					 } catch (Exception e1) {
+					 JOptionPane.showMessageDialog(frame,
+					 "Can't start server. "+e1.getMessage());
+					 return;
+					 }
+
 					serverAddress.setEnabled(false);
 					portServer.setEnabled(false);
 					rootDir.setEnabled(false);
@@ -188,8 +190,14 @@ public class ServerGUI {
 					statusServerLable.setText("Started");
 				} else {
 					// stop server action
-					WebServer.stopServer();
-					
+					try{
+					server.stopServer();
+					}catch(Exception except)
+					{
+						JOptionPane.showMessageDialog(frame,
+								 "Can't stop server. "+except.getMessage());	
+						return;
+					}
 					serverAddress.setEnabled(true);
 					portServer.setEnabled(true);
 					rootDir.setEnabled(true);
@@ -218,6 +226,8 @@ public class ServerGUI {
 								"Not a valid path for the mentenace!");
 						return;
 					}
+					server.setPathMent(validMentDir.getText());
+
 					rootDir.setEnabled(true);
 					browseButton.setEnabled(true);
 					browseMentButton.setEnabled(false);
@@ -226,6 +236,14 @@ public class ServerGUI {
 					mentenanceDir.setEnabled(false);
 					actionButton.setEnabled(false);
 				} else {
+					// actiunea de stop mentenace
+					if (!validRootDir.getText().equals("OK")) {
+						JOptionPane.showMessageDialog(frame,
+								"Not a valid path for the root directory!");
+						return;
+					}
+					server.setPathRoot(rootDir.getText());
+
 					browseMentButton.setEnabled(true);
 					mentenaceButton.setText("Start Mentenance");
 					mentenanceDir.setEnabled(true);
@@ -233,6 +251,7 @@ public class ServerGUI {
 					browseButton.setEnabled(false);
 					statusServerLable.setText("Started");
 					actionButton.setEnabled(true);
+
 				}
 			}
 		});
@@ -270,16 +289,18 @@ public class ServerGUI {
 			}
 		});
 	}
+	
 
-	public static void setRootDir(String newRoot) {
+
+	public void setRootDir(String newRoot) {
 		rootDir.setText(newRoot);
 	}
 
-	public static void setMentDir(String newDir) {
+	public void setMentDir(String newDir) {
 		mentenanceDir.setText(newDir);
 	}
 
-	public static void validateRoot() {
+	public void validateRoot() {
 		String path = rootDir.getText();
 
 		File file = new File(path);
@@ -297,7 +318,7 @@ public class ServerGUI {
 		validRootDir.setText("OK");
 	}
 
-	public static void validateMent() {
+	public void validateMent() {
 		String path = mentenanceDir.getText();
 
 		File file = new File(path);

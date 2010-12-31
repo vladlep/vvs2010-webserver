@@ -14,12 +14,14 @@ public class BrowseListener extends AbstractAction {
 	JFileChooser chooser;
     JFrame frame;
     String rootType;
+    ServerGUI server;
     
-    BrowseListener(JFrame frame, JFileChooser chooser,String rootType) {
+    BrowseListener(JFrame frame, JFileChooser chooser,String rootType, ServerGUI server) {
         super("Open");
         this.chooser = chooser;
         this.frame = frame;
         this.rootType = rootType;
+        this.server = server;
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -31,13 +33,13 @@ public class BrowseListener extends AbstractAction {
         File file = chooser.getSelectedFile();
         if(rootType.equals("Mentenace"))
         {
-        	ServerGUI.setMentDir(file.getAbsolutePath());
-        	ServerGUI.validateMent();
+        	server.setMentDir(file.getAbsolutePath());
+        	server.validateMent();
         }
         else
         {
-        	ServerGUI.setRootDir(file.getAbsolutePath());
-        	ServerGUI.validateRoot();
+        	server.setRootDir(file.getAbsolutePath());
+        	server.validateRoot();
         }
         }
         

@@ -3,13 +3,18 @@ package server;
 import java.net.*;
 import java.io.*;
 
+import javax.swing.RootPaneContainer;
+
 public class WebServer extends Thread {
 
-	public static boolean serverStarted;
-	public final int port;
-	public final String pathRoot;
-	public final String pathMent;
-	private static ServerSocket serverSocket = null;
+	private boolean serverStarted = false;
+	private boolean serverInMentenanceMode = false;
+
+	private int port;
+	private String pathRoot;
+	private String pathMent;
+
+	private ServerSocket serverSocket = null;
 	public static int i = 0;
 
 	public void run() {
@@ -29,53 +34,69 @@ public class WebServer extends Thread {
 			} catch (IOException e) {
 				if (serverStarted) {
 					System.err.println("Accept failed.");
-					System.exit(1);
-				}
-				else
-				{
+					throw new RuntimeException("Can't accept connections");
+					//					System.exit(1);
+				} else {
 					System.out.println("Server stopped.");
 				}
 
 			}
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + port + ".");
-			System.exit(1);
+//			throw new RuntimeException("Could not listen on port: " + port + ".");
+						System.exit(1);
 		} finally {
 			try {
-				serverSocket.close();
+				if(serverSocket.isBound())
+					serverSocket.close();
 			} catch (IOException e) {
 				System.err.println("Could not close port: " + port + ".");
-				System.exit(1);
+//			throw new RuntimeException("Could not close port: "+ port + ".");
 			}
 		}
 	}
 
-	private WebServer(int port, String pathRoot, String pathMent) {
+	public WebServer(int port, String pathRoot, String pathMent) {
 		this.port = port;
 		this.pathRoot = pathRoot;
 		this.pathMent = pathMent;
 
 	}
 
-	public static void startServer(int port, String pathRoot, String pathMent) {
+	// public static synchronized void startServer(int port, String pathRoot,
+	// String pathMent) {
+	//
+	// new WebServer(port, pathRoot, pathMent).start();
+	//
+	// }
 
-		new WebServer(port, pathRoot, pathMent).start();
-
-	}
-
-	public static void stopServer() {
+	public synchronized void stopServer() {
 		serverStarted = false;
 		try {
 			serverSocket.close();
 		} catch (IOException e) {
-			System.out.println("always apperas ? ? ");
 			e.printStackTrace();
 		}
 	}
 
+	public synchronized void enterMaintanance() {
+		serverInMentenanceMode = true;
+	}
+
+	public synchronized boolean getMaintananceStatus() {
+		return serverInMentenanceMode;
+	}
 
 	public String toString() {
 
 		return "port: " + port + " root: " + pathRoot + " ment : " + pathMent;
+	}
+
+	public synchronized void setPathRoot(String path) {
+		pathRoot = path;
+	}
+
+	public synchronized void setPathMent(String path) {
+		pathMent = path;
 	}
 }
