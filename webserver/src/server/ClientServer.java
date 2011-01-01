@@ -1,18 +1,21 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ClientServer extends Thread {
-	
+
 	private Socket clientSocket;
-	
-	public ClientServer(Socket clientSoc) {
+	private WebServer server;
+
+	public ClientServer(Socket clientSoc, WebServer webServer) {
 		clientSocket = clientSoc;
-		
+		server = webServer;
 	}
 
 	public void run() {
@@ -23,11 +26,29 @@ public class ClientServer extends Thread {
 					true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					clientSocket.getInputStream()));
+			BufferedReader fileReader = null;
 
 			String inputLine;
+			String path;
+			path = server.getPathRoot();
+			System.out.println(path);
+			File asckedFile = new File(path + "/ex.html");
+			System.out.println(asckedFile.exists());
+			if (!asckedFile.exists())
+				asckedFile = new File(path + "/index.html");
+			if(server.getMaintananceStatus())
+				asckedFile = new File(path + "/mentenance.html");
 			
+			fileReader = new BufferedReader(new FileReader(asckedFile));
+			while ((inputLine = fileReader.readLine()) != null) {
+
+				System.out.println(inputLine);
+				out.println(inputLine);
+			}
+
 			while ((inputLine = in.readLine()) != null) {
-				System.out.println("Server: " +WebServer.i+ inputLine);
+
+				System.out.println("Server: " + WebServer.i + inputLine);
 				out.println(inputLine);
 
 				if (inputLine.trim().equals(""))
@@ -36,6 +57,7 @@ public class ClientServer extends Thread {
 
 			out.close();
 			in.close();
+			fileReader.close();
 			clientSocket.close();
 		} catch (IOException e) {
 			System.err.println("Problem with Communication Server");
