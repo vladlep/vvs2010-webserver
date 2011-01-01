@@ -227,6 +227,7 @@ public class ServerGUI {
 						return;
 					}
 					server.setPathMent(validMentDir.getText());
+					server.setMentenance(true);
 
 					rootDir.setEnabled(true);
 					browseButton.setEnabled(true);
@@ -243,7 +244,8 @@ public class ServerGUI {
 						return;
 					}
 					server.setPathRoot(rootDir.getText());
-
+					server.setMentenance(false);
+					
 					browseMentButton.setEnabled(true);
 					mentenaceButton.setText("Start Mentenance");
 					mentenanceDir.setEnabled(true);

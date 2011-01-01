@@ -30,14 +30,31 @@ public class ClientServer extends Thread {
 
 			String inputLine;
 			String path;
-			path = server.getPathRoot();
+			String root;
+			root = server.getPathRoot();
+			path = root;
 			System.out.println(path);
-			File asckedFile = new File(path + "/ex.html");
-			System.out.println(asckedFile.exists());
+			File asckedFile = null;
+			
+		
+			while ((inputLine = in.readLine()) != null) {
+
+				System.out.println("Server: " + WebServer.i + inputLine);
+//				out.println(inputLine);
+				if(inputLine.contains("GET"))
+				{	path = root + inputLine.substring(inputLine.indexOf("GET")+4,inputLine.indexOf("HTTP"));
+					System.out.println("!!!!!!!!!!!!!!!!Requesting : "+path);
+				}	
+			if (inputLine.trim().equals(""))
+					break;
+			}
+			
+			asckedFile = new File(path);
+			
 			if (!asckedFile.exists())
-				asckedFile = new File(path + "/index.html");
+				asckedFile = new File(root + "/index.html");
 			if(server.getMaintananceStatus())
-				asckedFile = new File(path + "/mentenance.html");
+				asckedFile = new File(root + "/mentenance.html");
 			
 			fileReader = new BufferedReader(new FileReader(asckedFile));
 			while ((inputLine = fileReader.readLine()) != null) {
@@ -46,20 +63,14 @@ public class ClientServer extends Thread {
 				out.println(inputLine);
 			}
 
-			while ((inputLine = in.readLine()) != null) {
-
-				System.out.println("Server: " + WebServer.i + inputLine);
-				out.println(inputLine);
-
-				if (inputLine.trim().equals(""))
-					break;
-			}
+		
 
 			out.close();
 			in.close();
 			fileReader.close();
 			clientSocket.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 			System.err.println("Problem with Communication Server");
 			System.exit(1);
 		}
