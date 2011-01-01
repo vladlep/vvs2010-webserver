@@ -28,14 +28,14 @@ public class WebServer extends Thread {
 					System.out.println("Waiting for Connection");
 					Socket client = serverSocket.accept();
 					if (serverStarted)
-						new ClientServer(client,this).start();
+						new ClientServer(client, this).start();
 					i = i + 10;
 				}
 			} catch (IOException e) {
 				if (serverStarted) {
 					System.err.println("Accept failed.");
 					throw new RuntimeException("Can't accept connections");
-					//					System.exit(1);
+					// System.exit(1);
 				} else {
 					System.out.println("Server stopped.");
 				}
@@ -43,15 +43,19 @@ public class WebServer extends Thread {
 			}
 		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + port + ".");
-//			throw new RuntimeException("Could not listen on port: " + port + ".");
-						System.exit(1);
+			// throw new RuntimeException("Could not listen on port: " + port +
+			// ".");
+			e.printStackTrace();
+			System.exit(1);
 		} finally {
 			try {
-				if(serverSocket.isBound())
+				if (serverSocket.isBound())
 					serverSocket.close();
 			} catch (IOException e) {
 				System.err.println("Could not close port: " + port + ".");
-//			throw new RuntimeException("Could not close port: "+ port + ".");
+				e.printStackTrace();
+				// throw new RuntimeException("Could not close port: "+ port +
+				// ".");
 			}
 		}
 	}
@@ -79,8 +83,8 @@ public class WebServer extends Thread {
 		}
 	}
 
-	public synchronized void enterMaintanance() {
-		serverInMentenanceMode = true;
+	public synchronized void setMentenance(boolean flag) {
+		serverInMentenanceMode = flag;
 	}
 
 	public synchronized boolean getMaintananceStatus() {
@@ -95,15 +99,15 @@ public class WebServer extends Thread {
 	public synchronized void setPathRoot(String path) {
 		pathRoot = path;
 	}
-	
+
 	public synchronized String getPathRoot() {
 		return pathRoot;
 	}
-	
+
 	public synchronized void setPathMent(String path) {
 		pathMent = path;
 	}
-	
+
 	public synchronized String getPathMent() {
 		return pathMent;
 	}
