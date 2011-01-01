@@ -28,7 +28,7 @@ public class WebServer extends Thread {
 					System.out.println("Waiting for Connection");
 					Socket client = serverSocket.accept();
 					if (serverStarted)
-						new ClientServer(client).start();
+						new ClientServer(client,this).start();
 					i = i + 10;
 				}
 			} catch (IOException e) {
@@ -95,8 +95,16 @@ public class WebServer extends Thread {
 	public synchronized void setPathRoot(String path) {
 		pathRoot = path;
 	}
-
+	
+	public synchronized String getPathRoot() {
+		return pathRoot;
+	}
+	
 	public synchronized void setPathMent(String path) {
 		pathMent = path;
+	}
+	
+	public synchronized String getPathMent() {
+		return pathMent;
 	}
 }
