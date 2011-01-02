@@ -72,7 +72,7 @@ public class ClientServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Problem with Communication Server");
-			System.exit(1);
+//			System.exit(1);
 		}
 	}
 }

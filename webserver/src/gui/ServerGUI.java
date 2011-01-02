@@ -24,8 +24,8 @@ import javax.swing.text.MaskFormatter;
 import server.WebServer;
 
 public class ServerGUI {
-	public static boolean RIGHT_TO_LEFT = false;
-	private JFrame frame;
+	private static boolean RIGHT_TO_LEFT = false;
+	private static JFrame frame;
 	private JTextField rootDir;
 	private JTextField mentenanceDir;
 	private JLabel validMentDir;
@@ -81,7 +81,7 @@ public class ServerGUI {
 		pathPanel.setLayout(pathPanelLayout);
 
 		pathPanel.add(new JLabel("Root dir (*) : "));
-		rootDir = new JTextField("C:\\Users\\vll\\vlad\\scoala\\test");
+		rootDir = new JTextField("./server");
 
 		rootDir.addKeyListener(new KeyListener() {
 
@@ -119,7 +119,7 @@ public class ServerGUI {
 				"Root",this));
 
 		pathPanel.add(new JLabel("Mentenance dir : "));
-		mentenanceDir = new JTextField("Insert mentenance dir");
+		mentenanceDir = new JTextField("./server");
 
 		pathPanel.add(mentenanceDir);
 
@@ -172,7 +172,7 @@ public class ServerGUI {
 
 					int port = Integer.valueOf(portServer.getText());
 
-					server = new WebServer(port, rootDir.getText(),
+					server = new WebServer(serverAddress.getText() , port, rootDir.getText(),
 							mentenanceDir.getText());
 					try{
 					server.start();
@@ -336,6 +336,13 @@ public class ServerGUI {
 		}
 
 		validMentDir.setText("OK");
+	}
+	
+	public static void showMessage(String msg)
+	{
+		JOptionPane.showMessageDialog(frame,
+				msg);
+
 	}
 
 }
