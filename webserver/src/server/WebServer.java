@@ -5,8 +5,6 @@ import gui.ServerGUI;
 import java.net.*;
 import java.io.*;
 
-
-
 public class WebServer extends Thread {
 
 	private boolean serverStarted = false;
@@ -18,17 +16,19 @@ public class WebServer extends Thread {
 
 	private ServerSocket serverSocket = null;
 	private String ipAddress;
-	
+
 	public static int i = 0;
 
+	@Override
 	public void run() {
 
 		serverStarted = true;
 		try {
 			System.out.println(ipAddress);
 			System.out.println();
-			serverSocket = new ServerSocket(port,10,InetAddress.getByName(ipAddress));
-			
+			serverSocket = new ServerSocket(port, 10,
+					InetAddress.getByName(ipAddress));
+
 			System.out.println("Connection Socket Created");
 			try {
 				while (serverStarted) {
@@ -48,11 +48,10 @@ public class WebServer extends Thread {
 				}
 
 			}
-		}catch(UnknownHostException e)
-		{
-			ServerGUI.showMessage("Incorect ip address: " + ipAddress + ".");	
-		}
-		catch (IOException e) {
+		} catch (UnknownHostException e) {
+			ServerGUI.showMessage("Incorect ip address: " + ipAddress + ".");
+			System.exit(1);
+		} catch (IOException e) {
 			System.err.println("Could not listen on port: " + port + ".");
 			e.printStackTrace();
 			ServerGUI.showMessage("Could not listen on port: " + port + ".");
@@ -63,14 +62,16 @@ public class WebServer extends Thread {
 					serverSocket.close();
 			} catch (IOException e) {
 				System.err.println("Could not close port: " + port + ".");
-				ServerGUI.showMessage("Could not listen on port: " + port + ".");
+				ServerGUI
+						.showMessage("Could not listen on port: " + port + ".");
 				e.printStackTrace();
-			
+
 			}
 		}
 	}
 
-	public WebServer(String ipAddress, int port, String pathRoot, String pathMent) {
+	public WebServer(String ipAddress, int port, String pathRoot,
+			String pathMent) {
 		this.port = port;
 		this.pathRoot = pathRoot;
 		this.pathMent = pathMent;
@@ -101,6 +102,7 @@ public class WebServer extends Thread {
 		return serverInMentenanceMode;
 	}
 
+	@Override
 	public String toString() {
 
 		return "port: " + port + " root: " + pathRoot + " ment : " + pathMent;

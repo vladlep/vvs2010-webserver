@@ -85,6 +85,7 @@ public class ServerGUI {
 
 		rootDir.addKeyListener(new KeyListener() {
 
+			@Override
 			public void keyTyped(KeyEvent e) {
 
 			}
@@ -116,7 +117,7 @@ public class ServerGUI {
 		browseRoot.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		browseButton.addActionListener(new BrowseListener(frame, browseRoot,
-				"Root",this));
+				"Root", this));
 
 		pathPanel.add(new JLabel("Mentenance dir : "));
 		mentenanceDir = new JTextField("./server");
@@ -150,10 +151,11 @@ public class ServerGUI {
 		pathPanel.add(validMentDir);
 
 		browseMentButton.addActionListener(new BrowseListener(frame,
-				browseRoot, "Mentenace",this));
+				browseRoot, "Mentenace", this));
 
 		actionButton.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (actionButton.getText().equals("Start Server")) {
@@ -172,15 +174,15 @@ public class ServerGUI {
 
 					int port = Integer.valueOf(portServer.getText());
 
-					server = new WebServer(serverAddress.getText() , port, rootDir.getText(),
-							mentenanceDir.getText());
-					try{
-					server.start();
-					 } catch (Exception e1) {
-					 JOptionPane.showMessageDialog(frame,
-					 "Can't start server. "+e1.getMessage());
-					 return;
-					 }
+					server = new WebServer(serverAddress.getText(), port,
+							rootDir.getText(), mentenanceDir.getText());
+					try {
+						server.start();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(frame,
+								"Can't start server. " + e1.getMessage());
+						return;
+					}
 
 					serverAddress.setEnabled(false);
 					portServer.setEnabled(false);
@@ -190,12 +192,11 @@ public class ServerGUI {
 					statusServerLable.setText("Started");
 				} else {
 					// stop server action
-					try{
-					server.stopServer();
-					}catch(Exception except)
-					{
+					try {
+						server.stopServer();
+					} catch (Exception except) {
 						JOptionPane.showMessageDialog(frame,
-								 "Can't stop server. "+except.getMessage());	
+								"Can't stop server. " + except.getMessage());
 						return;
 					}
 					serverAddress.setEnabled(true);
@@ -245,7 +246,7 @@ public class ServerGUI {
 					}
 					server.setPathRoot(rootDir.getText());
 					server.setMentenance(false);
-					
+
 					browseMentButton.setEnabled(true);
 					mentenaceButton.setText("Start Mentenance");
 					mentenanceDir.setEnabled(true);
@@ -286,13 +287,12 @@ public class ServerGUI {
 
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new ServerGUI().createAndShowGUI();
 			}
 		});
 	}
-	
-
 
 	public void setRootDir(String newRoot) {
 		rootDir.setText(newRoot);
@@ -337,11 +337,9 @@ public class ServerGUI {
 
 		validMentDir.setText("OK");
 	}
-	
-	public static void showMessage(String msg)
-	{
-		JOptionPane.showMessageDialog(frame,
-				msg);
+
+	public static void showMessage(String msg) {
+		JOptionPane.showMessageDialog(frame, msg);
 
 	}
 
