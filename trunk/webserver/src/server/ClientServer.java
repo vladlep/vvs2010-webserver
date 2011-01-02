@@ -18,6 +18,7 @@ public class ClientServer extends Thread {
 		server = webServer;
 	}
 
+	@Override
 	public void run() {
 		System.out.println("New Communication Thread Started");
 
@@ -35,35 +36,34 @@ public class ClientServer extends Thread {
 			path = root;
 			System.out.println(path);
 			File asckedFile = null;
-			
-		
+
 			while ((inputLine = in.readLine()) != null) {
 
 				System.out.println("Server: " + WebServer.i + inputLine);
-//				out.println(inputLine);
-				if(inputLine.contains("GET"))
-				{	path = root + inputLine.substring(inputLine.indexOf("GET")+4,inputLine.indexOf("HTTP"));
-					System.out.println("!!!!!!!!!!!!!!!!Requesting : "+path);
-				}	
-			if (inputLine.trim().equals(""))
+				// out.println(inputLine);
+				if (inputLine.contains("GET")) {
+					path = root
+							+ inputLine.substring(inputLine.indexOf("GET") + 4,
+									inputLine.indexOf("HTTP"));
+					System.out.println("!!!!!!!!!!!!!!!!Requesting : " + path);
+				}
+				if (inputLine.trim().equals(""))
 					break;
 			}
-			
+
 			asckedFile = new File(path);
-			
+
 			if (!asckedFile.exists())
 				asckedFile = new File(root + "/index.html");
-			if(server.getMaintananceStatus())
+			if (server.getMaintananceStatus())
 				asckedFile = new File(root + "/mentenance.html");
-			
+
 			fileReader = new BufferedReader(new FileReader(asckedFile));
 			while ((inputLine = fileReader.readLine()) != null) {
 
 				System.out.println(inputLine);
 				out.println(inputLine);
 			}
-
-		
 
 			out.close();
 			in.close();
@@ -72,7 +72,7 @@ public class ClientServer extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Problem with Communication Server");
-//			System.exit(1);
+			// System.exit(1);
 		}
 	}
 }
