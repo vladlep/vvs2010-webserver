@@ -1,9 +1,11 @@
 package server;
 
+import gui.ServerGUI;
+
 import java.net.*;
 import java.io.*;
 
-import javax.swing.RootPaneContainer;
+
 
 public class WebServer extends Thread {
 
@@ -15,13 +17,18 @@ public class WebServer extends Thread {
 	private String pathMent;
 
 	private ServerSocket serverSocket = null;
+	private String ipAddress;
+	
 	public static int i = 0;
 
 	public void run() {
 
 		serverStarted = true;
 		try {
-			serverSocket = new ServerSocket(port);
+			System.out.println(ipAddress);
+			System.out.println();
+			serverSocket = new ServerSocket(port,10,InetAddress.getByName(ipAddress));
+			
 			System.out.println("Connection Socket Created");
 			try {
 				while (serverStarted) {
@@ -41,11 +48,14 @@ public class WebServer extends Thread {
 				}
 
 			}
-		} catch (IOException e) {
+		}catch(UnknownHostException e)
+		{
+			ServerGUI.showMessage("Incorect ip address: " + ipAddress + ".");	
+		}
+		catch (IOException e) {
 			System.err.println("Could not listen on port: " + port + ".");
-			// throw new RuntimeException("Could not listen on port: " + port +
-			// ".");
 			e.printStackTrace();
+			ServerGUI.showMessage("Could not listen on port: " + port + ".");
 			System.exit(1);
 		} finally {
 			try {
@@ -53,18 +63,18 @@ public class WebServer extends Thread {
 					serverSocket.close();
 			} catch (IOException e) {
 				System.err.println("Could not close port: " + port + ".");
+				ServerGUI.showMessage("Could not listen on port: " + port + ".");
 				e.printStackTrace();
-				// throw new RuntimeException("Could not close port: "+ port +
-				// ".");
+			
 			}
 		}
 	}
 
-	public WebServer(int port, String pathRoot, String pathMent) {
+	public WebServer(String ipAddress, int port, String pathRoot, String pathMent) {
 		this.port = port;
 		this.pathRoot = pathRoot;
 		this.pathMent = pathMent;
-
+		this.ipAddress = ipAddress;
 	}
 
 	// public static synchronized void startServer(int port, String pathRoot,
