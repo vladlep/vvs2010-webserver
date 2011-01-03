@@ -35,8 +35,7 @@ public class WebServer extends Thread {
 			if (serverStarted) {
 				System.err.println("Accept failed.");
 				e.printStackTrace();
-				// throw new RuntimeException("Can't accept connections");
-				// System.exit(1);
+
 			} else {
 				System.out.println("Server stopped.");
 			}
@@ -56,7 +55,7 @@ public class WebServer extends Thread {
 	}
 
 	public WebServer(String ipAddress, int port, String pathRoot,
-			String pathMent) {
+			String pathMent) throws UnknownHostException, IOException {
 		this.port = port;
 		this.pathRoot = pathRoot;
 		this.pathMent = pathMent;
@@ -71,13 +70,11 @@ public class WebServer extends Thread {
 	//
 	// }
 
-	public synchronized void stopServer() {
+	public synchronized void stopServer() throws IOException {
 		serverStarted = false;
-		try {
+	
 			serverSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
 	}
 
 	public synchronized void setMentenance(boolean flag) {
@@ -115,21 +112,12 @@ public class WebServer extends Thread {
 		return pathMent;
 	}
 
-	private void createSocket() {
+	private void createSocket() throws UnknownHostException, IOException {
 
 		serverStarted = true;
-		try {
-			serverSocket = new ServerSocket(port, 10,
-					InetAddress.getByName(ipAddress));
-		} catch (UnknownHostException e) {
-			ServerGUI.showMessage("Incorect ip address: " + ipAddress + ".");
-			System.exit(1);
-		} catch (IOException e) {
-			System.err.println("Could not listen on port: " + port + ".");
-			e.printStackTrace();
-			ServerGUI.showMessage("Could not listen on port: " + port + ".");
-			System.exit(1);
-		}
+		serverSocket = new ServerSocket(port, 10,
+				InetAddress.getByName(ipAddress));
+
 		System.out.println("Connection Socket Created");
 	}
 }
