@@ -72,9 +72,9 @@ public class WebServer extends Thread {
 
 	public synchronized void stopServer() throws IOException {
 		serverStarted = false;
-	
-			serverSocket.close();
-	
+
+		serverSocket.close();
+
 	}
 
 	public synchronized void setMentenance(boolean flag) {

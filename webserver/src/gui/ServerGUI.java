@@ -142,7 +142,6 @@ public class ServerGUI {
 			@Override
 			public void keyPressed(KeyEvent e) {
 
-
 			}
 		});
 
@@ -183,10 +182,12 @@ public class ServerGUI {
 						ServerGUI.showMessage("Incorect ip address.");
 						System.exit(1);
 					} catch (IOException e1) {
-						System.err.println("Could not listen on port: " + port + ".");
+						System.err.println("Could not listen on port: " + port
+								+ ".");
 						e1.printStackTrace();
-						ServerGUI.showMessage("Could not listen on port: " + port + ".");
-//						System.exit(1);
+						ServerGUI.showMessage("Could not listen on port: "
+								+ port + ".");
+						// System.exit(1);
 					}
 					try {
 						server.start();
@@ -355,6 +356,5 @@ public class ServerGUI {
 		System.err.println(msg);
 		frame.dispose();
 	}
-	
-	
+
 }
