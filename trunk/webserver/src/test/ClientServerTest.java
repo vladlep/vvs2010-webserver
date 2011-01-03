@@ -7,9 +7,6 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
@@ -58,8 +55,7 @@ public class ClientServerTest {
 
 	}
 
-	
-	//no file
+	// no file
 	@Test
 	public void testCehckUnavailableFile() throws IOException {
 
@@ -68,20 +64,20 @@ public class ClientServerTest {
 		boolean flag = false;
 		server.start();
 		assertEquals(true, server.getServerStatus());
-		
+
 		URL url1 = new URL("http://127.0.0.1:10011/nofile");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(url1.openStream()));
-		
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				url1.openStream()));
+
 		try {
 			while ((temp = in.readLine()) != null) {
 
-				if (temp.contains("404 No page found"))
-				{
+				if (temp.contains("404 No page found")) {
 					flag = true;
 					break;
 				}
-		
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,7 +87,7 @@ public class ClientServerTest {
 		assertTrue(!server.getServerStatus());
 	}
 
-	//mentenance mode
+	// mentenance mode
 	@Test
 	public void testMentenanceMode() throws IOException {
 
@@ -100,22 +96,22 @@ public class ClientServerTest {
 		boolean flag = false;
 		server.setMentenance(true);
 		server.start();
-	
+
 		assertEquals(true, server.getServerStatus());
-		
+
 		URL url1 = new URL("http://127.0.0.1:10011/nofile");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(url1.openStream()));
-		
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				url1.openStream()));
+
 		try {
 			while ((temp = in.readLine()) != null) {
 
-				if (temp.contains("Mentenance mode."))
-				{
+				if (temp.contains("Mentenance mode.")) {
 					flag = true;
 					break;
 				}
-		
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -125,44 +121,44 @@ public class ClientServerTest {
 		assertTrue(!server.getServerStatus());
 	}
 
-	//simple file
+	// simple file
 	@Test
 	public void testAnAvailableFile() throws IOException {
 
 		server = new WebServer("127.0.0.1", 10011, "./server", "./server");
 		String temp;
 		boolean flag = false;
-		
+
 		server.start();
 		assertEquals(true, server.getServerStatus());
-		
+
 		URL url1 = new URL("http://127.0.0.1:10011/cssinsamefolder.html");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(url1.openStream()));
-		
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				url1.openStream()));
+
 		try {
 			while ((temp = in.readLine()) != null) {
 
 				System.out.println(temp);
-				
-				if (temp.contains("Css in same folder."))
-				{
+
+				if (temp.contains("Css in same folder.")) {
 					flag = true;
 					break;
 				}
-		
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
 	}
-	
-	//css in other folder
-	
+
+	// css in other folder
+
 	@Test
 	public void testCssInFolder() throws IOException {
 
@@ -171,22 +167,22 @@ public class ClientServerTest {
 		boolean flag = false;
 		server.start();
 		assertEquals(true, server.getServerStatus());
-		
+
 		URL url1 = new URL("http://127.0.0.1:10011/cssinfolder.html");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(url1.openStream()));
-		
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				url1.openStream()));
+
 		try {
 			while ((temp = in.readLine()) != null) {
 
 				System.out.println(temp);
-				
-				if (temp.contains("Css in folder."))
-				{
+
+				if (temp.contains("Css in folder.")) {
 					flag = true;
 					break;
 				}
-		
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -196,8 +192,8 @@ public class ClientServerTest {
 		assertTrue(!server.getServerStatus());
 	}
 
-//css in other folder and site in other folder
-	
+	// css in other folder and site in other folder
+
 	@Test
 	public void testComplex() throws IOException {
 
@@ -206,33 +202,32 @@ public class ClientServerTest {
 		boolean flag = false;
 		server.start();
 		assertEquals(true, server.getServerStatus());
-		
+
 		URL url1 = new URL("http://127.0.0.1:10011/site/complex.html");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(url1.openStream()));
-		
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				url1.openStream()));
+
 		try {
 			while ((temp = in.readLine()) != null) {
 
 				System.out.println(temp);
-				
-				if (temp.contains("Complex test."))
-				{
+
+				if (temp.contains("Complex test.")) {
 					flag = true;
 					break;
 				}
-		
+
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
 	}
-	
-	
+
 	@After
 	public void clean() throws IOException {
 		server.stopServer();
