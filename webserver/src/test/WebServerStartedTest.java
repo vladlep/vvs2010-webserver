@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +14,10 @@ public class WebServerStartedTest {
 	WebServer server = null;;
 
 	@Before
-	public void init() {
-		server = new WebServer("127.0.0.1", 10008, "./server", "./server");
+	public void init() throws Exception{
+		
+			server = new WebServer("127.0.0.1", 10008, "./server", "./server");
+		
 		server.start();
 	}
 
@@ -25,8 +28,15 @@ public class WebServerStartedTest {
 
 	}
 
+	@Test
+	public void testEnterMaintanance()
+	{
+		server.setMentenance(true);
+		assertEquals(true,server.getMaintananceStatus());
+		assertEquals(true,server.getServerStatus());
+	}
 	@After
-	public void clear() {
+	public void clear() throws IOException {
 		server.stopServer();
 	}
 }

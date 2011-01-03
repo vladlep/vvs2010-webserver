@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -139,7 +141,7 @@ public class ServerGUI {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+
 
 			}
 		});
@@ -174,8 +176,18 @@ public class ServerGUI {
 
 					int port = Integer.valueOf(portServer.getText());
 
-					server = new WebServer(serverAddress.getText(), port,
-							rootDir.getText(), mentenanceDir.getText());
+					try {
+						server = new WebServer(serverAddress.getText(), port,
+								rootDir.getText(), mentenanceDir.getText());
+					} catch (UnknownHostException e1) {
+						ServerGUI.showMessage("Incorect ip address.");
+						System.exit(1);
+					} catch (IOException e1) {
+						System.err.println("Could not listen on port: " + port + ".");
+						e1.printStackTrace();
+						ServerGUI.showMessage("Could not listen on port: " + port + ".");
+//						System.exit(1);
+					}
 					try {
 						server.start();
 					} catch (Exception e1) {
@@ -339,8 +351,10 @@ public class ServerGUI {
 	}
 
 	public static void showMessage(String msg) {
-		JOptionPane.showMessageDialog(frame, msg);
 
+		System.err.println(msg);
+		frame.dispose();
 	}
-
+	
+	
 }
