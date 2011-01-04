@@ -41,6 +41,7 @@ public class WebServerStartStopTest {
 
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
 	}
 
 	@Test(expected = UnknownHostException.class)

@@ -39,6 +39,7 @@ public class ClientServerTest {
 		dis.writeUTF("altceva");
 
 		server.stopServer();
+		dis.close();
 	}
 
 	@Test(expected = IOException.class)
@@ -85,6 +86,7 @@ public class ClientServerTest {
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
 	}
 
 	// mentenance mode
@@ -119,6 +121,7 @@ public class ClientServerTest {
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
 	}
 
 	// simple file
@@ -155,6 +158,8 @@ public class ClientServerTest {
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
+		in.close();
 	}
 
 	// css in other folder
@@ -190,6 +195,7 @@ public class ClientServerTest {
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
 	}
 
 	// css in other folder and site in other folder
@@ -226,6 +232,7 @@ public class ClientServerTest {
 		assertTrue(flag);
 		server.stopServer();
 		assertTrue(!server.getServerStatus());
+		in.close();
 	}
 
 	@After

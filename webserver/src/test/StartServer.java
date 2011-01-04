@@ -11,13 +11,11 @@ public class StartServer {
 		WebServer server = null;
 		try {
 			server = new WebServer("127.0.0.1", 10008,
-					"C:\\sers\\vll\\vlad\\scoala\\test",
-					"C:\\sers\\vll\\vlad\\scoala\\test");
+					"C:\\Users\\vll\\vlad\\scoala\\test",
+					"C:\\Users\\vll\\vlad\\scoala\\test");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
